@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:"Noto Sans TC",system-ui,sans-serif; background:#eaf6fb; color:#1B3A4B; -webkit-font-smoothing:antialiased; }
+  a{ color:#FF8B6B; text-decoration:none; }
+  a:hover{ color:#e6603f; }
+  ::selection{ background:#FFC857; color:#1B3A4B; }
+  @keyframes floatA{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(28px,-18px);} }
+  @keyframes floatB{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(-32px,14px);} }
+  @keyframes floatC{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(18px,20px);} }
+  @keyframes heroRise{ from{ opacity:0; transform:translateY(30px);} to{ opacity:1; transform:none;} }
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(8px);} }
+  @keyframes planeHover{ 0%,100%{ transform:translate(0,0) rotate(6deg);} 50%{ transform:translate(6px,-8px) rotate(6deg);} }
+  @font-face{ font-family:"Brother Signature"; src:url("./uploads/brother-signature-font/BrotherSignature-7BWnK.otf") format("opentype"); font-display:swap; }
+</style>
+</helmet>
+
+<div data-root="" style="position:relative; min-height:100vh; overflow-x:hidden; background:linear-gradient(180deg,#A0D8EF 0%,#c4e7f5 20%,#dff1f9 46%,#eaf6fb 100%);">
+
+  <!-- fixed floating clouds -->
+  <div style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <div style="position:absolute; top:16%; left:6%; width:220px; height:84px; background:#fff; border-radius:120px; opacity:.65; filter:blur(2px); animation:floatA 15s ease-in-out infinite;"></div>
+    <div style="position:absolute; top:34%; right:8%; width:280px; height:100px; background:#fff; border-radius:130px; opacity:.5; filter:blur(3px); animation:floatB 19s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:20%; left:14%; width:180px; height:70px; background:#fff; border-radius:90px; opacity:.5; filter:blur(2px); animation:floatC 13s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:8%; right:16%; width:150px; height:60px; background:#fff; border-radius:80px; opacity:.45; filter:blur(2px); animation:floatA 12s ease-in-out infinite;"></div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:50; padding:16px 32px; display:flex; align-items:center; gap:24px; backdrop-filter:blur(10px); background:rgba(234,246,251,0.72); border-bottom:1px solid rgba(27,58,75,0.08);">
+    <a href="./Home.dc.html" style="display:flex; align-items:center; color:#1B3A4B; font-family:'Brother Signature',cursive; font-size:32px; line-height:1;">Hugo Chen</a>
+    <nav style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+      <a href="./Home.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">Home</a>
+      <a href="./About.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">關於我</a>
+      <a href="#top" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:700; font-size:14px; background:rgba(160,216,239,0.6);">Work</a>
+      <span style="width:1px; height:20px; background:rgba(27,58,75,0.14); margin:0 6px;"></span>
+      <a href="https://goatchen.substack.com/" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">電子報<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+      <a href="https://open.spotify.com/playlist/62oNBx1209j3Dbzghb5FZr?si=70ef6da39a3049b2" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">精選歌單<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+      <a href="./Home.dc.html" style="padding:8px 16px; border-radius:9px; background:#FF8B6B; color:#fff; font-weight:700; font-size:14px;">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ============ HEADER ============ -->
+  <section id="top" style="position:relative; z-index:2; text-align:center; padding:150px 6vw 20px; animation:heroRise .7s ease both;">
+    <div style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.5em; color:#1B3A4B; opacity:.5;">FLIGHT LOG · 2022 → NOW</div>
+    <h1 style="margin:14px 0 0; font-family:'Brother Signature',cursive; font-size:clamp(56px,8vw,104px); line-height:1.02; font-weight:400; letter-spacing:0;">My Portfolio</h1>
+    <p style="margin:16px auto 0; max-width:520px; font-size:16px; line-height:1.7; color:#1B3A4B; opacity:.72; text-wrap:pretty;">持續挖掘只有自己能做的事。</p>
+    <div style="margin:26px auto 0; font-family:'Space Mono',monospace; font-size:12px; color:#1B3A4B; opacity:.45; display:flex; flex-direction:column; align-items:center; gap:4px;">往下滑<span style="font-size:18px;">↓</span></div>
+  </section>
+
+  <!-- ============ TIMELINE ============ -->
+  <section style="position:relative; z-index:2; max-width:1000px; margin:0 auto; padding:48px 5vw 140px;">
+    <!-- center dashed route -->
+    <div style="position:absolute; left:50%; top:0; bottom:120px; width:3px; transform:translateX(-50%); background:repeating-linear-gradient(#1B3A4B 0 6px, transparent 6px 18px); opacity:.32;"></div>
+    <!-- plane at top of route -->
+    <svg style="position:absolute; left:50%; top:-6px; transform:translate(-50%,-50%) rotate(6deg); z-index:3; animation:planeHover 5s ease-in-out infinite;" width="42" height="32" viewBox="0 0 40 30"><g fill="#FF8B6B" stroke="#1B3A4B" stroke-width="2" stroke-linejoin="round"><path d="M4 15 L36 5 L20 25 L16 18 Z"></path></g></svg>
+
+    <div style="display:flex; flex-direction:column; gap:64px;">
+
+      <!-- STOP 1 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FFC857; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-1" count="2" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2022 · 新北市</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">輔仁大學企業管理學系</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">於 2022 年 9 月入學，於 2026 年 6 月畢業。<br>走出人生的新結點與告別青春的記憶。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">Management</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">Business<br></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 2 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FF8B6B; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-2" count="3" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2022-2023 · 創業 / 行銷</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">博耳樂器 Bruh Music LLC</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">與「韋伯樂器」創辦人兼校友共同創辦，主售電子鋼琴、耳機、錄音設備等。<br></p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(255,200,87,0.4); font-size:12px; font-weight:500;">電商</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(255,200,87,0.4); font-size:12px; font-weight:500;">Sales Service</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 3 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#7FB98E; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-3" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2023 · 旅行 / 思考</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">流浪異國一個月</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">存錢前往日本關西，走訪姬路、奈良、京都等地。創造與交換了無數故事與視角。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;">自我成長</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;">Travel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 4 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#C89BE0; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-4" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2024 · ENTREPRENEURSHIP</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">輔大創新創業社 FJU IEC</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">入社兩年以來，從儲備幹部到副社長；走過了數十場專案與合作；與社長領導三十餘位幹部，以領導力為核心，孵育眾多創業青年人才實際落地。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">Student Club</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">Business</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 5 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FFC857; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-5" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2024 · 教育 / 永續</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">【永續 x AI】暑期全國提案競賽</div><p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">以副召身份，串接「E-port 賦能港科技」及「博雅教育基金會」於輔大舉辦兩日營隊。<br>吸引全國六十位高中生參加，從工作坊、Coffee Chat 等形式引導組隊，產出最終提案。</p>
+            
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">永續</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">Artificial Intelligence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 6 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FF8B6B; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-6" count="3" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;"><span style="letter-spacing: 1.32px;">2024 · 教育 / 新創</span></div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;"><span style="letter-spacing: -0.22px;">諾瑪教育 Nomad Education</span></div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">以「訂閱制興趣學習」為主題，切入當代快節奏與資訊雜亂痛點，重新為生活型態定錨。<br>「青年局創新創業教育成果展」25 組之一、榮獲 U-Start 工作坊「最佳人氣獎」, etc.</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 500; background-color: #FFC85766"><span style="background-color: #A0D8EF00">U-Start</span></span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(255,200,87,0.4); font-size:12px; font-weight:500;"><span style="background-color: #FFC85700">興趣開發</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 7 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#7FB98E; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-7" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;"><span style="letter-spacing: 1.32px;">2025 · 東京 / 國際事務</span></div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;"><span style="letter-spacing: -0.22px;">Global Leadership Program</span></div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">獲選 6 位輔仁大使之一，參加上智大學 Sophia U 主辦 2025 GLP 與八國頂尖學校代表交流。<br>與 UNESCO 駐日代表及校長交流，走訪秦野市、聯合國大學等地，教育提案等經驗。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;"><span style="background-color: #FFC85700">ESD</span></span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;"><span style="background-color: #FFC85700">Leadership</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 8 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#C89BE0; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-8" count="3" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2025-2026 · 社會影響力</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;"><span style="letter-spacing: -0.22px;">Impact Hub Taipei</span></div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">創新育成組實習生 Impact Acceleration Intern，在四個月期間，參與 50+ 社會企業＆NPO 孵化與加速；參與籌備 Vision Future、渣打女力創業獎等加速器專案。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">創業生態圈</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">實習</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 9 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FFC857; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-9" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2025 · 企業管理學系</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;"><div>第 60 屆畢業專題策略組優勝獎</div></div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">與 B 型企業「印花樂 inBlooom」合作，以《印上新花Young：以網絡觀點發起臺灣印花美學跨世代共生行動》 為題的 1 年期企業策略管理專案。<br>從 Z 世代市場分析切入，與 5+ 組織合作並從零製作產品雛形，到市集販售實際落地。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">企業策略</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(160,216,239,0.4); font-size:12px; font-weight:500;">Gen Z 市場</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 10 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#FF8B6B; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-10" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2026 · 社團年度專案</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">Next Up 創新創業跨校論壇</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">以總召身份串接全國 5 所創新創業社（長庚、淡江等）籌辦。以 2026 WEF 年度主題「如何在競爭激烈的世界相互合作？」出發，邀請 VC、創業家等演講。最終達 80 人次＆ 93% 滿意度。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(255,200,87,0.4); font-size:12px; font-weight:500;">組織籌劃</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(255,200,87,0.4); font-size:12px; font-weight:500;">新創</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 11 · right -->
+      <div style="position:relative; display:flex; justify-content:flex-end;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#7FB98E; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <dc-import name="WorkGallery" base="work-11" hint-size="100%,240px"></dc-import>
+          <div style="padding:20px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2026 · 新北市新莊區</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">Young 飛全球行動計畫</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">由教育部青年局出資贊助。「新莊妙妙廟 Temple Street Revived」為題，復甦新莊廟口文化。<br>本人主掌 8+ 跨國 INGO/ NPO 對接與會議主持、組織營運改善策略，現已進入行動方案 3.0 階段。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;">文化復甦</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(127,185,142,0.35); font-size:12px; font-weight:500;">組織</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOP 12 · left -->
+      <div style="position:relative; display:flex; justify-content:flex-start;">
+        <div style="position:absolute; left:50%; top:38px; transform:translate(-50%,-50%); width:22px; height:22px; border-radius:50%; background:#C89BE0; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5); z-index:2;"></div>
+        <div style="width:calc(50% - 40px); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 54px -26px rgba(27,58,75,0.5);">
+          <div style="padding:26px 22px 22px;">
+            <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#FF8B6B;">2026 · AI Training</div>
+            <div style="font-size:22px; font-weight:900; margin:5px 0 0; letter-spacing:-0.01em;">RWS Data Specialist</div>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.65; color:#4a6675;">自由職業接案，現參與華語＆英語 AI Training 事務。</p>
+            <div style="margin:14px 0 0; display:flex; flex-wrap:wrap; gap:7px;">
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">AI</span>
+              <span style="padding:5px 12px; border-radius:100px; background:rgba(200,155,224,0.32); font-size:12px; font-weight:500;">遠距</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- landing marker -->
+    <div style="position:relative; text-align:center; margin:64px 0 0;">
+      <div style="display:inline-flex; flex-direction:column; align-items:center; gap:14px;">
+        <div style="width:26px; height:26px; border-radius:50%; background:#1B3A4B; border:4px solid #fff; box-shadow:0 4px 12px -3px rgba(27,58,75,0.5);"></div>
+        <div style="font-family:'Brother Signature',cursive; font-size:34px; color:#1B3A4B;">to be continued…</div>
+        <a href="./Home.dc.html" style="padding:11px 22px; border-radius:100px; background:#FF8B6B; color:#fff; font-weight:700; font-size:14px;">回首頁</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

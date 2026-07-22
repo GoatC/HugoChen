@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:"Noto Sans TC",system-ui,sans-serif; background:#F7FAFB; color:#1B3A4B; -webkit-font-smoothing:antialiased; }
+  a{ color:#FF8B6B; text-decoration:none; }
+  a:hover{ color:#e6603f; }
+  ::selection{ background:#FFC857; color:#1B3A4B; }
+  @keyframes floatA{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(28px,-18px);} }
+  @keyframes floatB{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(-32px,14px);} }
+  @keyframes floatC{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(18px,20px);} }
+  @keyframes pop{ 0%{ opacity:0; transform:translateY(-8px) scale(.96);} 60%{ transform:translateY(2px) scale(1.01);} 100%{ opacity:1; transform:none;} }
+  @keyframes caretBlink{ 0%,100%{ opacity:1;} 50%{ opacity:0;} }
+  @font-face{ font-family:"Brother Signature"; src:url("./uploads/brother-signature-font/BrotherSignature-7BWnK.otf") format("opentype"); font-display:swap; }
+</style>
+</helmet>
+
+<div data-root style="position:relative;">
+
+  <!-- ============ NAV ============ -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:50; padding:16px 32px; display:flex; align-items:center; gap:24px; backdrop-filter:blur(10px); background:rgba(247,250,251,0.72); border-bottom:1px solid rgba(27,58,75,0.08);">
+    <a href="./Home.dc.html" style="display:flex; align-items:center; color:#1B3A4B; font-family:'Brother Signature',cursive; font-size:32px; line-height:1;">Hugo Chen</a>
+
+    <nav style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+      <a href="./Home.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">Home</a>
+      <a href="./About.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:700; font-size:14px; background:rgba(160,216,239,0.35);">關於我</a>
+      <a href="./Work.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">Work</a>
+
+      <span style="width:1px; height:20px; background:rgba(27,58,75,0.14); margin:0 6px;"></span>
+
+      <a href="https://goatchen.substack.com/" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">電子報<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+      <a href="https://open.spotify.com/playlist/62oNBx1209j3Dbzghb5FZr?si=70ef6da39a3049b2" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">精選歌單<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+
+      <span style="width:1px; height:20px; background:rgba(27,58,75,0.14); margin:0 6px;"></span>
+
+      <div style="position:relative;">
+        <button onClick="{{ toggleJoke }}" style="border:none; cursor:pointer; padding:8px 14px; border-radius:9px; background:#FFC857; color:#1B3A4B; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px; display:flex; align-items:center; gap:6px;">笑話按鈕</button>
+        <sc-if value="{{ jokeOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:calc(100% + 12px); right:0; z-index:60; width:min(380px,84vw); animation:pop .28s cubic-bezier(.34,1.56,.64,1) both;">
+            <div style="background:#fff; border:1px solid rgba(27,58,75,0.1); border-radius:20px; box-shadow:0 26px 60px -18px rgba(27,58,75,0.4); padding:22px; position:relative;">
+              <div style="position:absolute; top:-9px; right:26px; width:18px; height:18px; background:#fff; border-left:1px solid rgba(27,58,75,0.1); border-top:1px solid rgba(27,58,75,0.1); transform:rotate(45deg);"></div>
+              <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <button onClick="{{ closeJoke }}" style="border:none; cursor:pointer; background:#F7FAFB; width:28px; height:28px; border-radius:8px; color:#1B3A4B; font-size:15px; line-height:1;">✕</button>
+              </div>
+              <p style="margin:12px 0 0; font-size:17px; line-height:1.65; font-weight:500; text-wrap:pretty; white-space:pre-line;">{{ currentJoke }}</p>
+              <button onClick="{{ nextJoke }}" style="margin:18px 0 0; border:none; cursor:pointer; padding:10px 18px; border-radius:100px; background:#FFC857; color:#1B3A4B; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:7px;">↻ 再一個</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="position:relative;">
+        <button onClick="{{ toggleContact }}" style="border:none; cursor:pointer; padding:8px 16px; border-radius:9px; background:#FF8B6B; color:#fff; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px;">Contact</button>
+        <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:calc(100% + 10px); right:0; width:210px; background:#fff; border:1px solid rgba(27,58,75,0.1); border-radius:14px; box-shadow:0 16px 40px -12px rgba(27,58,75,0.28); padding:8px; animation:pop .22s ease both;">
+            <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.12em; color:#8aa2ad; padding:8px 12px 4px;">FIND ME AT</div>
+            <a href="https://instagram.com/lifegoatchen" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; color:#1B3A4B; font-weight:500; font-size:14px;" style-hover="background:#F7FAFB;"><img src="./uploads/Instagram_logo_2022.svg" alt="Instagram" style="width:26px; height:26px; border-radius:8px; object-fit:contain; display:block;">@lifegoatchen</a>
+            <a href="https://www.linkedin.com/in/hugo-chen-7386b5252" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; color:#1B3A4B; font-weight:500; font-size:14px;" style-hover="background:#F7FAFB;"><img src="./uploads/linkedin logo.png" alt="LinkedIn" style="width:26px; height:26px; border-radius:8px; object-fit:contain; display:block;">@HugoChen</a>
+          </div>
+        </sc-if>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============ 捲動舞台 (頁面固定，文字→照片依序淡入) ============ -->
+  <div data-scrollwrap style="position:relative; height:640vh;">
+    <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:linear-gradient(180deg,#A0D8EF 0%,#c4e7f5 42%,#F7FAFB 100%);">
+      <div style="position:absolute; inset:0; pointer-events:none;">
+        <div style="position:absolute; top:12%; left:6%; width:220px; height:90px; background:#fff; border-radius:100px; opacity:.7; filter:blur(2px); animation:floatA 13s ease-in-out infinite;"></div>
+        <div style="position:absolute; top:26%; right:8%; width:300px; height:110px; background:#fff; border-radius:120px; opacity:.55; filter:blur(3px); animation:floatB 17s ease-in-out infinite;"></div>
+        <div style="position:absolute; bottom:16%; left:14%; width:170px; height:70px; background:#fff; border-radius:80px; opacity:.5; filter:blur(2px); animation:floatC 11s ease-in-out infinite;"></div>
+      </div>
+
+      <!-- 置中純文字 -->
+      <div data-abouttext style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:96px 8vw 40px; will-change:opacity,transform;">
+        <p data-typetarget style="margin:0; max-width:660px; font-size:clamp(15px,1.55vw,19px); line-height:2.05; color:#1B3A4B; text-wrap:pretty; white-space:pre-line; text-align:left;"><span data-typed></span><span data-caret style="display:inline-block; width:2px; height:1.05em; background:#FF8B6B; margin-left:2px; vertical-align:-0.16em; animation:caretBlink .9s step-end infinite;"></span></p>
+      </div>
+
+      <!-- 照片拼貼層（佔導覽列以下約 70%） -->
+      <div style="position:absolute; left:0; right:0; top:72px; bottom:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+        <div style="position:relative; width:min(1180px,94vw); height:70vh; pointer-events:auto;">
+          <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="10">
+            <div data-photo="{{ $index }}" style="position:absolute; left:{{ ph.left }}; top:{{ ph.top }}; width:{{ ph.w }}; opacity:0; transform:translateY(24px) rotate({{ ph.rot }}); transition:opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1); background:#fff; padding:7px 7px 7px; border-radius:12px; box-shadow:0 18px 40px -16px rgba(27,58,75,0.4);">
+              <div style="position:relative; width:100%; aspect-ratio:4/3; border-radius:6px; overflow:hidden;">
+                <image-slot id="{{ ph.id }}" shape="rect" placeholder="{{ ph.ph }}"></image-slot>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div data-scrollhint style="position:absolute; bottom:26px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; transition:opacity .4s ease;">
+        <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#1B3A4B; opacity:.5;">SCROLL</span>
+        <span style="font-size:18px; color:#1B3A4B; opacity:.5;">↓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 自訂游標 ============ -->
+  <div data-cursor style="position:fixed; top:0; left:0; z-index:100; pointer-events:none; opacity:0; will-change:transform; transition:opacity .25s ease;">
+    <sc-if value="{{ showCloud }}" hint-placeholder-val="{{ false }}">
+      <svg width="46" height="30" viewBox="0 0 46 30" style="display:block; transform:translate(-16px,-14px);"><g fill="#A0D8EF" stroke="#1B3A4B" stroke-width="2"><ellipse cx="23" cy="21" rx="17" ry="8"></ellipse><circle cx="14" cy="17" r="8"></circle><circle cx="24" cy="12" r="10"></circle><circle cx="33" cy="17" r="7"></circle></g></svg>
+    </sc-if>
+    <sc-if value="{{ showPlane }}" hint-placeholder-val="{{ false }}">
+      <svg width="40" height="30" viewBox="0 0 40 30" style="display:block; transform:translate(-8px,-8px);"><g fill="#FF8B6B" stroke="#1B3A4B" stroke-width="2" stroke-linejoin="round"><path d="M4 15 L36 5 L20 25 L16 18 Z"></path><path d="M16 18 L36 5" fill="none"></path></g></svg>
+    </sc-if>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;cursorStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;雲朵&quot;,&quot;紙飛機&quot;,&quot;關閉&quot;],&quot;default&quot;:&quot;關閉&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;游標&quot;}}">
+class Component extends DCLogic {
+  state = { contactOpen:false, jokeOpen:false, jokeIdx:0 };
+
+  jokes = [
+    "你知道為什麼櫻花鉤吻鮭喜歡找人單挑嗎？\n因為他特有種",
+    "曹操辦私人派對\n孟德斯鳩",
+    "為什麼工程師喜歡雲？因為終於有東西比他的髮線還會飄。"
+  ];
+
+  photos = [
+    { id:"about-photo-1",  ph:"照片 1",  left:"-3%", top:"3%",  w:"clamp(225px,25.5vw,348px)", rot:"-4deg" },
+    { id:"about-photo-2",  ph:"照片 2",  left:"22%", top:"0%",  w:"clamp(210px,24vw,321px)", rot:"3deg" },
+    { id:"about-photo-3",  ph:"照片 3",  left:"46%", top:"5%",  w:"clamp(225px,25.5vw,354px)", rot:"-2deg" },
+    { id:"about-photo-4",  ph:"照片 4",  left:"70%", top:"1%",  w:"clamp(210px,24vw,315px)", rot:"5deg" },
+    { id:"about-photo-5",  ph:"照片 5",  left:"3%",  top:"37%", w:"clamp(225px,25.5vw,339px)", rot:"2deg" },
+    { id:"about-photo-6",  ph:"照片 6",  left:"32%", top:"41%", w:"clamp(210px,24vw,321px)", rot:"-3deg" },
+    { id:"about-photo-7",  ph:"照片 7",  left:"56%", top:"36%", w:"clamp(225px,25.5vw,360px)", rot:"3deg" },
+    { id:"about-photo-8",  ph:"照片 8",  left:"77%", top:"40%", w:"clamp(195px,22.5vw,294px)", rot:"-5deg" },
+    { id:"about-photo-9",  ph:"照片 9",  left:"16%", top:"70%", w:"clamp(210px,24vw,333px)", rot:"4deg" },
+    { id:"about-photo-10", ph:"照片 10", left:"48%", top:"72%", w:"clamp(225px,25.5vw,345px)", rot:"-2deg" }
+  ];
+
+  cursorKind(){
+    const c = this.props.cursorStyle;
+    if (c === "紙飛機") return "plane";
+    if (c === "關閉") return "off";
+    return "cloud";
+  }
+
+  toggleContact = () => this.setState(s => ({ contactOpen:!s.contactOpen }));
+  toggleJoke = () => this.setState(s => ({ jokeOpen:!s.jokeOpen, jokeIdx: s.jokeOpen ? s.jokeIdx : Math.floor(Math.random()*this.jokes.length) }));
+  closeJoke = () => this.setState({ jokeOpen:false });
+  nextJoke = () => this.setState(s => { let i=s.jokeIdx; if(this.jokes.length>1){ while(i===s.jokeIdx) i=Math.floor(Math.random()*this.jokes.length); } return { jokeIdx:i }; });
+
+  onScroll = () => {
+    if (this._ticking) return;
+    this._ticking = true;
+    requestAnimationFrame(() => {
+      this._ticking = false;
+      const wrap = document.querySelector("[data-scrollwrap]");
+      if (!wrap) return;
+      const r = wrap.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const denom = (r.height - vh) || 1;
+      const p = Math.min(1, Math.max(0, -r.top / denom));
+      const txt = document.querySelector("[data-abouttext]");
+      if (txt){
+        const o = p < 0.12 ? 1 : Math.max(0.06, 1 - (p - 0.12) * 4.5);
+        txt.style.opacity = o;
+        txt.style.transform = `translateY(${ -Math.min(1, Math.max(0,(p-0.12))*3) * 26 }px)`;
+      }
+      const hint = document.querySelector("[data-scrollhint]");
+      if (hint) hint.style.opacity = p > 0.05 ? "0" : "1";
+      const photos = document.querySelectorAll("[data-photo]");
+      photos.forEach((el, i) => {
+        const start = 0.16 + i * 0.072;
+        const on = p >= start;
+        el.style.opacity = on ? "1" : "0";
+        el.style.transform = on ? "translateY(0) rotate(" + (this.photos[i] ? this.photos[i].rot : "0deg") + ")" : "translateY(24px) rotate(" + (this.photos[i] ? this.photos[i].rot : "0deg") + ")";
+      });
+    });
+  };
+
+  introText = "我的名字叫陳品翰 Hugo，21歲。\n住在高雄凹子底的別墅區一帶，未婚。\n我在輔仁大學企業管理學系畢業，正以「自由業者」身份上班。每天都要加班到晚上八點才能回家。\n我不抽菸，酒僅止於淺嚐。晚上2點一定會上床睡覺，並確保自己睡足8個小時。\n睡前我一定會喝一杯溫牛奶，然後做20分鐘的伸展操，放鬆身體後才上床睡覺。基本上絕不把疲勞和壓力留到第二天。\n醫生都說我很正常。\n我只想說明，我是一個隨時都想追求「平靜生活」的人，不拘泥於勝負與煩惱，不樹立令我夜不能寐的敵人，這是我在這個社會的生活態度。如果非要戰鬥，我也不會輸給任何人。";
+
+  startTyping(){
+    const target = document.querySelector("[data-typed]");
+    const caret = document.querySelector("[data-caret]");
+    if (!target) return;
+    const full = this.introText;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce){ target.textContent = full; return; }
+    const total = 8000, n = full.length, step = total / n;
+    let i = 0, acc = 0, last = performance.now();
+    const tick = (now) => {
+      acc += now - last; last = now;
+      while (acc >= step && i < n){ i++; acc -= step; }
+      target.textContent = full.slice(0, i);
+      if (i < n){ this._typeRaf = requestAnimationFrame(tick); }
+      else if (caret){ setTimeout(()=>{ caret.style.opacity="0"; caret.style.animation="none"; }, 1200); }
+    };
+    this._typeRaf = requestAnimationFrame(tick);
+  }
+
+  componentDidMount(){
+    this.startTyping();
+    window.addEventListener("scroll", this.onScroll, { passive:true });
+    this.onScroll();
+
+    const cur = document.querySelector("[data-cursor]");
+    const kind = this.cursorKind();
+    if (cur && kind !== "off" && window.matchMedia("(pointer:fine)").matches){
+      document.body.style.cursor = "none";
+      let x=window.innerWidth/2, y=window.innerHeight/2, cx=x, cy=y, shown=false;
+      const move = (e)=>{ x=e.clientX; y=e.clientY; if(!shown){ shown=true; cur.style.opacity="1"; } };
+      const leave = ()=>{ cur.style.opacity="0"; shown=false; };
+      window.addEventListener("mousemove", move);
+      document.addEventListener("mouseleave", leave);
+      const tick = ()=>{
+        cx += (x-cx)*0.55; cy += (y-cy)*0.55;
+        cur.style.transform = `translate(${cx}px,${cy}px) scale(${this._hoverScale||1})`;
+        this._raf = requestAnimationFrame(tick);
+      };
+      tick();
+      const over = (e)=>{ if(e.target.closest("a,button,[data-interactive]")) this._hoverScale=1.5; };
+      const out = (e)=>{ if(e.target.closest("a,button,[data-interactive]")) this._hoverScale=1; };
+      document.addEventListener("mouseover", over);
+      document.addEventListener("mouseout", out);
+      this._curCleanup = ()=>{ window.removeEventListener("mousemove",move); document.removeEventListener("mouseleave",leave); document.removeEventListener("mouseover",over); document.removeEventListener("mouseout",out); document.body.style.cursor=""; };
+    }
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener("scroll", this.onScroll);
+    if(this._typeRaf) cancelAnimationFrame(this._typeRaf);
+    if(this._raf) cancelAnimationFrame(this._raf);
+    if(this._curCleanup) this._curCleanup();
+  }
+
+  renderVals(){
+    const kind = this.cursorKind();
+    return {
+      contactOpen: this.state.contactOpen,
+      jokeOpen: this.state.jokeOpen,
+      currentJoke: this.jokes[this.state.jokeIdx],
+      photos: this.photos,
+      showCloud: kind === "cloud",
+      showPlane: kind === "plane",
+      toggleContact: this.toggleContact,
+      toggleJoke: this.toggleJoke,
+      closeJoke: this.closeJoke,
+      nextJoke: this.nextJoke
+    };
+  }
+}
+</script>
+</body>
+</html>

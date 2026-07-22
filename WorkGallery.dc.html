@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<div style="position:relative; width:100%; aspect-ratio:16/10; overflow:hidden; background:#eef5f9;">
+  <div style="display:flex; width:100%; height:100%; transition:transform .6s cubic-bezier(.7,0,.2,1); transform:{{ offset }};">
+    <sc-for list="{{ slots }}" as="s" hint-placeholder-count="4">
+      <div style="flex:0 0 100%; width:100%; height:100%;"><image-slot id="{{ s.id }}" shape="rect" placeholder="{{ s.ph }}"></image-slot></div>
+    </sc-for>
+  </div>
+  <div style="position:absolute; bottom:9px; left:0; right:0; display:flex; justify-content:center; gap:6px; z-index:3; pointer-events:none;">
+    <sc-for list="{{ dots }}" as="d" hint-placeholder-count="4">
+      <span style="width:7px; height:7px; border-radius:50%; background:{{ d.bg }}; box-shadow:0 1px 3px rgba(27,58,75,0.4);"></span>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;400px&quot;,&quot;height&quot;:&quot;250px&quot;},&quot;base&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;gallery&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;count&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4,&quot;min&quot;:1,&quot;max&quot;:6,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { i: 0 };
+  count() {
+    const c = parseInt(this.props.count, 10);
+    return (Number.isFinite(c) && c > 0) ? c : 4;
+  }
+  componentDidMount() {
+    this.t = setInterval(() => this.setState(s => ({ i: (s.i + 1) % this.count() })), 2000);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const base = this.props.base || 'gallery';
+    const n = this.count();
+    const i = this.state.i % n;
+    const seq = Array.from({ length: n }, (_, k) => k);
+    const slots = seq.map(k => ({ id: base + '-' + k, ph: '照片 ' + (k + 1) }));
+    const dots = seq.map(k => ({ bg: k === i ? '#FF8B6B' : 'rgba(255,255,255,0.75)' }));
+    return { offset: 'translateX(-' + (i * 100) + '%)', slots, dots };
+  }
+}
+</script>
+</body>
+</html>

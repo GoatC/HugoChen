@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:"Noto Sans TC",system-ui,sans-serif; background:#F7FAFB; color:#1B3A4B; -webkit-font-smoothing:antialiased; }
+  a{ color:#FF8B6B; text-decoration:none; }
+  a:hover{ color:#e6603f; }
+  ::selection{ background:#FFC857; color:#1B3A4B; }
+  @keyframes floatA{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(28px,-18px);} }
+  @keyframes floatB{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(-32px,14px);} }
+  @keyframes floatC{ 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(18px,20px);} }
+  @keyframes heroRise{ from{ opacity:0; transform:translateY(30px);} to{ opacity:1; transform:none;} }
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(7px);} }
+  @keyframes fadeGreet{ 0%{ opacity:0; transform:translateY(5px);} 100%{ opacity:.55; transform:none;} }
+  @keyframes fadeChip{ 0%{ opacity:0; transform:translateY(5px);} 100%{ opacity:1; transform:none;} }
+  @keyframes pop{ 0%{ opacity:0; transform:translateY(-8px) scale(.96);} 60%{ transform:translateY(2px) scale(1.01);} 100%{ opacity:1; transform:none;} }
+  @font-face{ font-family:"Brother Signature"; src:url("./uploads/brother-signature-font/BrotherSignature-7BWnK.otf") format("opentype"); font-display:swap; }
+</style>
+</helmet>
+
+<div data-root="" style="position:relative; height:100vh; overflow:hidden;">
+
+  <!-- ============ NAV ============ -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:50; padding:16px 32px; display:flex; align-items:center; gap:24px; backdrop-filter:blur(10px); background:rgba(247,250,251,0.72); border-bottom:1px solid rgba(27,58,75,0.08);">
+    <a href="#top" style="display:flex; align-items:center; color:#1B3A4B; font-family:'Brother Signature',cursive; font-size:32px; line-height:1;">
+      Hugo Chen
+    </a>
+
+    <nav style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+      <a href="#top" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">Home</a>
+      <a href="./About.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">關於我</a>
+      <a href="./Work.dc.html" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px;">Work</a>
+      <span style="width:1px; height:20px; background:rgba(27,58,75,0.14); margin:0 6px;"></span>
+
+      <a href="https://goatchen.substack.com/" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">電子報<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+      <a href="https://open.spotify.com/playlist/62oNBx1209j3Dbzghb5FZr?si=70ef6da39a3049b2" target="_blank" rel="noopener" style="padding:8px 12px; border-radius:9px; color:#1B3A4B; font-weight:500; font-size:14px; display:flex; align-items:center; gap:6px;">精選歌單<span style="font-family:'Space Mono',monospace; font-size:11px; opacity:.5;">↗</span></a>
+
+      <div style="position:relative;">
+        <button data-joke-btn="" onClick="{{ toggleJoke }}" style="border:none; cursor:pointer; padding:8px 14px; border-radius:9px; background:#FFC857; color:#1B3A4B; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px; display:flex; align-items:center; gap:6px;">笑話按鈕</button>
+        <sc-if value="{{ jokeOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:calc(100% + 12px); right:0; z-index:60; width:min(380px,84vw); animation:pop .28s cubic-bezier(.34,1.56,.64,1) both;">
+            <div style="background:#fff; border:1px solid rgba(27,58,75,0.1); border-radius:20px; box-shadow:0 26px 60px -18px rgba(27,58,75,0.4); padding:22px; position:relative;">
+              <div style="position:absolute; top:-9px; right:26px; width:18px; height:18px; background:#fff; border-left:1px solid rgba(27,58,75,0.1); border-top:1px solid rgba(27,58,75,0.1); transform:rotate(45deg);"></div>
+              <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <button onClick="{{ closeJoke }}" style="border:none; cursor:pointer; background:#F7FAFB; width:28px; height:28px; border-radius:8px; color:#1B3A4B; font-size:15px; line-height:1;">✕</button>
+              </div>
+              <p style="margin:12px 0 0; font-size:17px; line-height:1.65; font-weight:500; text-wrap:pretty; white-space:pre-line;">{{ currentJoke }}</p>
+              <button onClick="{{ nextJoke }}" style="margin:18px 0 0; border:none; cursor:pointer; padding:10px 18px; border-radius:100px; background:#FFC857; color:#1B3A4B; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:7px;">↻ 再一個</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="position:relative;">
+        <button onClick="{{ toggleContact }}" style="border:none; cursor:pointer; padding:8px 16px; border-radius:9px; background:#FF8B6B; color:#fff; font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:14px;">Contact</button>
+        <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:calc(100% + 10px); right:0; width:210px; background:#fff; border:1px solid rgba(27,58,75,0.1); border-radius:14px; box-shadow:0 16px 40px -12px rgba(27,58,75,0.28); padding:8px; animation:pop .22s ease both;">
+            <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.12em; color:#8aa2ad; padding:8px 12px 4px;">Find me here</div>
+            <a href="https://instagram.com/lifegoatchen" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; color:#1B3A4B; font-weight:500; font-size:14px;" style-hover="background:#F7FAFB;"><img src="./uploads/Instagram_logo_2022.svg" alt="Instagram" style="width:26px; height:26px; border-radius:8px; object-fit:contain; display:block;">@lifegoatchen</a>
+            <a href="https://www.linkedin.com/in/hugo-chen-7386b5252" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; color:#1B3A4B; font-weight:500; font-size:14px;" style-hover="background:#F7FAFB;"><img src="./uploads/linkedin logo.png" alt="LinkedIn" style="width:26px; height:26px; border-radius:8px; object-fit:contain; display:block;">@HugoChen</a>
+          </div>
+        </sc-if>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============ HERO — 你是誰 (分割英雄) ============ -->
+  <section id="top" style="position:relative; height:100vh; display:flex; align-items:center; padding:120px 6vw 60px; background:linear-gradient(100deg,#F7FAFB 0%,#F7FAFB 46%,#e6f4fa 46%,#d7edf7 100%); overflow:hidden;">
+    <div style="position:absolute; inset:0; pointer-events:none;">
+      <div style="position:absolute; top:17%; right:7%; width:240px; height:96px; background:#fff; border-radius:120px; opacity:.8; filter:blur(2px); animation:floatB 15s ease-in-out infinite;"></div>
+      <div style="position:absolute; top:44%; right:33%; width:150px; height:62px; background:#fff; border-radius:80px; opacity:.55; filter:blur(2px); animation:floatA 13s ease-in-out infinite;"></div>
+      <div style="position:absolute; bottom:15%; right:15%; width:180px; height:74px; background:#fff; border-radius:90px; opacity:.5; filter:blur(2px); animation:floatC 12s ease-in-out infinite;"></div>
+    </div>
+
+    <div style="position:relative; z-index:4; width:100%; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1.05fr 0.95fr; align-items:center; gap:40px;">
+      <div>
+        <div style="font-family:'Space Mono',monospace; font-size:14px; letter-spacing:0.42em; color:#1B3A4B;"><span key="{{ greetIdx }}" style="opacity:.55; animation:fadeGreet .55s ease both;">{{ greeting }}</span><span style="opacity:.5;"> · 我是</span></div>
+        <h1 style="margin:16px 0 0; font-size:clamp(56px,8vw,104px); line-height:0.98; font-weight:900; letter-spacing:-0.03em; animation:heroRise .8s ease .18s both;">陳品翰</h1>
+        <div style="margin:20px 0 0; display:inline-block; font-size:clamp(18px,2vw,24px); font-weight:700; border-bottom:3px solid #FF8B6B; padding-bottom:4px; animation:heroRise .8s ease .3s both;">來自凹子底的巨人，一些綠豆大的小事<br></div>
+        <p style="margin:24px 0 0; max-width:440px; font-size:clamp(15px,1.4vw,18px); line-height:1.7; color:#1B3A4B; opacity:.82; text-wrap:pretty; animation:heroRise .8s ease .42s both;"><span style="background-color: initial;">持續挖掘只有自己能做的事。<br></span><span style="opacity: 0.6; font-size: 0.8em; font-family: &quot;Space Mono&quot;, monospace;">Nice to have you here.</span></p>
+        <div style="margin:34px 0 0; display:flex; flex-direction:column; align-items:flex-start; gap:12px; font-family:'Space Grotesk',sans-serif; font-weight:500; animation:heroRise .8s ease .54s both;">
+          <span style="padding:9px 16px; border-radius:100px; background:rgba(255,255,255,0.7); border:1px solid rgba(27,58,75,0.1); font-size:14px;">企管系 BBA @ FJU 26</span>
+          <span style="padding:9px 16px; border-radius:100px; background:rgba(255,255,255,0.7); border:1px solid rgba(27,58,75,0.1); font-size:14px;">📍 高雄市 ·&nbsp;Kaohsiung City</span>
+          <span key="{{ roleIdx }}" style="{{ roleStyle }}">{{ role }}</span>
+        </div>
+      </div>
+
+      <div style="position:relative; height:min(84vh,720px); display:flex; align-items:flex-end; justify-content:center; animation:heroRise .9s ease .3s both;">
+        <div style="position:absolute; left:50%; top:48%; transform:translate(-50%,-50%); width:min(42vw,560px); height:min(42vw,560px); border-radius:50%; background:#FFC857; opacity:.92;"></div>
+        <div style="position:absolute; left:70%; top:8%; width:88px; height:88px; border-radius:50%; background:#FF8B6B; opacity:.9; animation:bob 6s ease-in-out infinite;"></div>
+        <img src="./uploads/Subject%202.png" alt="陳品翰 Hugo Chen" style="position:relative; z-index:2; width:min(46vw,640px); height:auto; filter:drop-shadow(0 24px 34px rgba(27,58,75,0.32));">
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ 自訂游標 ============ -->
+  <div data-cursor="" style="position:fixed; top:0; left:0; z-index:100; pointer-events:none; opacity:0; will-change:transform; transition:opacity .25s ease;">
+    <sc-if value="{{ showCloud }}" hint-placeholder-val="{{ false }}">
+      <svg width="46" height="30" viewBox="0 0 46 30" style="display:block; transform:translate(-16px,-14px);"><g fill="#A0D8EF" stroke="#1B3A4B" stroke-width="2"><ellipse cx="23" cy="21" rx="17" ry="8"></ellipse><circle cx="14" cy="17" r="8"></circle><circle cx="24" cy="12" r="10"></circle><circle cx="33" cy="17" r="7"></circle></g></svg>
+    </sc-if>
+    <sc-if value="{{ showPlane }}" hint-placeholder-val="{{ false }}">
+      <svg width="40" height="30" viewBox="0 0 40 30" style="display:block; transform:translate(-8px,-8px);"><g fill="#FF8B6B" stroke="#1B3A4B" stroke-width="2" stroke-linejoin="round"><path d="M4 15 L36 5 L20 25 L16 18 Z"></path><path d="M16 18 L36 5" fill="none"></path></g></svg>
+    </sc-if>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;cursorStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;雲朵&quot;,&quot;紙飛機&quot;,&quot;關閉&quot;],&quot;default&quot;:&quot;關閉&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;游標&quot;},&quot;revealStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;柔和上升&quot;,&quot;彈簧回彈&quot;],&quot;default&quot;:&quot;柔和上升&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;進場動畫&quot;}}">
+class Component extends DCLogic {
+  state = { contactOpen:false, jokeOpen:false, jokeIdx:0, greetIdx:0, roleIdx:0 };
+
+  hexToRgba(hex,a){ const n=parseInt(hex.slice(1),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; }
+
+  greetings = ["HELLO","你好","こんにちは","KUMUSTA","BONJOUR","CIAO","HOLA","ПРИВЕТ"];
+
+  roles = [
+    { label:"業餘專業 Gooner", c:"#FF8B6B" },
+    { label:"業餘英語教師", c:"#FFC857" },
+    { label:"長途旅者", c:"#A0D8EF" },
+    { label:"Larp 研究學者", c:"#7FB98E" },
+    { label:"業餘駐酒吧琴手", c:"#C89BE0" },
+    { label:"搖滾團員", c:"#F2708A" },
+    { label:"Home Cook", c:"#5EC4C4" }
+  ];
+
+  jokes = [
+    "你知道為什麼櫻花鉤吻鮭喜歡找人單挑嗎？\n因為他特有種",
+    "為什麼 jane 跟 john 每次運動會都拿很多獎牌？\n因為他們是運動 jane john",
+    "曹操辦私人派對\n孟德斯鳩",
+    "什麼花最好養\n菊花\n因為菊花好癢",
+    "芫荽熱狗\nmc hotdog",
+    "我原本是個甲甲\n哥本哈根",
+    "這個學校很多流氓\n不好校",
+    "學校保全一直笑\n他在笑什麼\n他在校門口",
+    "為什麼蔡依林的演唱會取消了\n因為政府頒布禁酒令",
+    "有一天蝦子被發現考試作弊\n老師很生氣的問\n蝦子你到底抄誰的答案？\n蝦子就說\n我抄蚌的",
+    "為什麼宋朝的外送平台不盛行？\n因為有很多契丹人",
+    "動物園裡最不能惹的動物是？\n猩猩\n因為他敲胸的",
+    "誰的肚子最硬\n印度人",
+    "為什麼大家都喜歡躲在廁所哭\n因為廁所有別人的氨味",
+    "前陣子田馥甄看到一群鮭魚順利洄游產卵\n就說\n他迴游多幸運",
+    "什麼藥年紀最小？\n安眠藥\n因為他嗜睡",
+    "什麼門最有錢\n雲門\n因為雲門舞集",
+    "先進船的人會先說什麼？\n會說 online\n因為仙境傳說 online",
+    "郭峻佑爆氣\n氣炸郭",
+    "小華的兒子都不吃東西\n華兒不食",
+    "陳奕迅養的兩隻鴿子互相打架受傷了\n他很難過唱著：\n如果那兩鴿子沒有戰鬥，我不會發現我難受",
+    "小明：哈哈哈哈哈哈哈哈！\n小華：小明，你在牆邊幹嘛？\n小明：我在牆沿歡笑",
+    "調皮的橘子？\n橘子皮",
+    "身上有殼的叫烏龜\n身上沒殼的叫\n無家可龜",
+    "有一天，小明去吉野家\n結果吉野不在家",
+    "在加油站時最討厭遇見哪種人？\n油槍滑掉的人",
+    "跟什麼職業的人當朋友最需要小心？\n賣魚的 Sell fish",
+    "巴斯是個勇者\n有一天終於屠龍成功\n國王很高興，就封他為\n殺龍巴斯",
+    "一隻老鷹叫 eagle\n那兩隻老鷹呢？\n兩 gle",
+    "喉嚨痛的鴨子會變什麼？\n南瓜",
+    "邵庭一直咳嗽\n邵美庭",
+    "我喜歡音樂的原因之一就是它能帶領你到不同的地方\n比如說現在這間咖啡廳裡正在放高爾宣的歌\n所以我現在要去另一間咖啡廳了",
+    "今天走在路上不小心踢死了一顆高麗菜\n他就變成高利貸了",
+    "在學店讀書，壓力是少的\n在頂大讀書，亞里士多德",
+    "跌倒一次\n跌倒兩次\n跌倒四次\n依比例絆倒",
+    "誰吃麵最快\n瘋狂假面",
+    "企鵝死掉會變成什麼\n鵝\n因為那沒有企了",
+    "請問這支筆有附筆芯嗎？\n店員：「只有風雅頌」",
+    "小明在餐廳吃飯\n他將滷汁倒入飯中\n背後出現一個黑衣人把他槍殺了\n因為他汁倒的太多了",
+    "有一天貝殼回到家了\ni'm back",
+    "張雨生走進了森林扛了一打木頭出來\n請問木頭從哪來的？\n雨生鋸來的",
+    "為什麼客家人都故作堅強\n因為他們都暗自 sad",
+    "稀飯放兩天還很燙\n週休二日",
+    "小明忘記繳學費\n拿著學費單去問同學：「你有繳交嗎？」\n同學：「我還有手手」",
+    "賴小姐，上次的事真的很謝謝妳\n呃⋯⋯可是我姓黃欸\n不，你是值得姓賴的人",
+    "小白兔 +1 會變成什麼？\n小白 three",
+    "諸葛亮喜歡誰？\n臭皮匠\n因為諸葛亮 <3 臭皮匠",
+    "律師為什麼對自己的收支情況特別清楚？\n因為律師要對帳",
+    "哪一種職業喜歡罵日本髒話\n牙醫\n他們會說：拔個牙囉",
+    "雷神索爾是交流電還是直流電？\n交流電，因為他不是 DC 的",
+    "很遜的人會被關在什麼房間\n偵訊室",
+    "dora 死了\n猜一地名\n聖地牙哥",
+    "夜路走多了\n總匯三明治",
+    "什麼東西在南部和北部都很流行？\n胃鏡，因為魏晉南北朝",
+    "刀子變鈍要去哪\n便利商店",
+    "有天小明跟小美在讀書\n他們明天要期末考壓力很大\n於是他們互相跟對方說加油\n然後他們就消失了\n因為他們互相 delete",
+    "學霸住在什麼區\n都會區",
+    "亻更食反\n加長便飯",
+    "比狠還要再狠一點是什麼？\n狼",
+    "婉蓁姓什麼，姓茶\n因為茶碗蒸",
+    "癌症病友的年終聚會叫什麼？\n癌友尾牙",
+    "台科大的校園吉祥物是什麼\n是老虎跟鴨子\n因為 tiger duck",
+    "電腦的媽媽叫什麼\n電腦螢幕",
+    "誰最會建鐵路\n吳宗憲\n因為嘿嘿建軌啦",
+    "joeman 的爸爸\n猜一個藝人\n9m88",
+    "我除以 5 = 金\n我就是金城武",
+    "有個舉重選手去參加比賽\n結果輸了\n他說\n真重，再見",
+    "小明感冒去看醫生經過診斷後\n醫生：喉嚨發炎\n喉嚨：嗨",
+    "蛤蠣麵放久了會變成什麼\n白酒蛤蠣麵",
+    "娘家養的雞被嚇到\n娘家滴雞精",
+    "獅子嚇到\n濕紙巾",
+    "關羽關羽\n雙關語",
+    "妙花種子踢到桌腳\n腫子腫子",
+    "為什麼用手機打電話結果手機燒起來\n因為我用賴打",
+    "y 看到 u 在哭，於是問他\nUNIQLO？",
+    "笑裏藏刀\n哈哈哈哈刀哈哈哈哈",
+    "醫生：你的身體裡沒有鎂了欸\n我：0mg",
+    "為什麼白鞋踩髒了就變好笑了？\n因為他變灰鞋了",
+    "小明他走進超商坐著輪椅出來\n因為他繳費了",
+    "有一天小明對小華的耳朵呼一口氣\n小華：你幹嘛\n小明：我在乎你",
+    "五月天不說話會變什麼\n啞 mayday",
+    "巧克力比賽贏了猜一種食物\n巧克力棒",
+    "為什麼捲頭髮的不能當警察\n因為他們是執法人員",
+    "蠶寶寶去早餐店\n在菜單前面看了很久\n老闆娘催他快一點\n蠶寶寶就說\n我總會吐司",
+    "有一個小姐包包被偷了\n於是他去警察局報案\n警察：包在我身上",
+    "抱歉麥克，讓你久等了\n麥克久等",
+    "孔子、孟子、老子，誰的ㄐㄐ最大？\n孔子，因為他大道不行",
+    "誰的姊姊最厲害？\n庖丁\n庖丁姊牛",
+    "哪個法律最開心？\n憲法\n因為憲法最高性",
+    "洗賓士車要用甚麼清潔劑洗？\n洗面乳",
+    "哪座城市一定輸\n京都\n京都議定書",
+    "把一顆楊桃變成兩顆需要什麼？\n複製楊桃力",
+    "一隻狗跟一隻烏龜結合\n變成一隻雞\n狗狗龜",
+    "卓別林死掉\nstrawberry",
+    "為什麼參加媽祖出巡的風險很高？\n因為送轎人會被暗殺",
+    "小明想去夏威夷\n威夷就被嚇到了",
+    "哪個藝人最喜歡在雨中談判\n夏宇喬",
+    "什麼東西可以讓水走路\n水餃",
+    "什麼帽子戴起來又流行又性感？\n流行性感帽",
+    "火鍋的父母是誰？\n黑鴿跟白鴿\n因為他們會生下灰鴿",
+    "豆腐出家\n喔密豆腐",
+    "今天晚上月亮會被他媽媽打\n因為他偏食",
+    "什麼老鼠最愛乾淨\n衛生署",
+    "為什麼淋雨的人都很粗心\n因為他們都帽帽濕濕ㄉ",
+    "玫瑰帶刺，人心帶私\nkangaroo 袋鼠",
+    "你知道為什麼古代皇帝身邊的妃子都帶負電嗎\n因為他們都會被朕吸引",
+    "經濟作物跟糧食作物誰比較囂張\n糧食作物，因為梁實秋",
+    "特斯拉的老婆是俄羅斯人\n因為他是斯拉夫人",
+    "蕭煌奇開什麼車？\n蕭煌車",
+    "你喜歡歌嗎？\n喜歡啊\n哥也喜歡你",
+    "如果船會說話，他會說什麼？\n對決\n因為傳說對決",
+    "公森講了一個很爛的笑話\n公森糗",
+    "蜜蜂去北極會變成什麼？\n雪碧",
+    "弟弟看鬼片\n猜一個地點\n地下道",
+    "什麼飲料最好玩？\n喝剩的飲料",
+    "我把烤箱藏起來了\n猜一個食物\n烤香腸",
+    "地瓜搭公車\n拔絲地瓜",
+    "誰生了約翰？\n花\n因為花生 john",
+    "一個孕婦有羊水\n兩個孕婦有什麼？\n雙氧水",
+    "巫婆死掉變什麼？\nswitch",
+    "肥皂掉進湖裡會變什麼？\n日月潭\n因為 sun moon lake",
+    "一隻壁虎斷了尾巴\n他說：不用擔心我，這會自己長出來，有時候活著就必須捨棄一些東西\n一隻螃蟹斷了手\n他說：ㄏㄏ我沒鉗了",
+    "桂花樹沒有桂花會變什麼？\n玫瑰花樹",
+    "有一天小明在廟裡求籤，抽到了大吉，廟公給了他紅茶\n大吉嶺紅茶",
+    "為什麼不能尿在鹽上面？\n因為會尿到鹽",
+    "超人脫褲子叫什麼？\n超屌",
+    "一群人失去了味覺，請問要派幾個人去找味覺？\n9 個\n因為 nine 人尋味",
+    "有一天蘋果和梨子比賽\n看誰先講到自己的名字就輸了\n梨子說：好！來啊！\n梨子就輸了",
+    "冰塊最大的願望是什麼？\n退伍\n因為他當冰很久了",
+    "為什麼嘻哈歌手都買不到葡萄？\n因為他們都說葡萄 yo",
+    "阿姨去打針\n護士：先深呼吸\n阿姨：我是小姐",
+    "學校哪裡最好笑？\n校史館",
+    "有一隻螃蟹故意一直咳嗽\n別人就問他：你明明沒有感冒，怎麼還一直咳嗽？\n螃蟹就說：因為我是假咳類動物",
+    "李白怎麼死的？\n詩寫過多",
+    "當你覺得你不行的時候，走到斑馬線上⋯⋯\n你就是個行人",
+    "媽媽：醫生，你看我兒子生了什麼病？\n兒子：賤！賤！賤！\n醫生想了一下說：這是一種喊賤的疾病",
+    "餐廳裡誰最厲害？\n客人\n因為他有點東西",
+    "What do you call a blind deer?\nNo idea.",
+    "猴子／野狼／老虎／獅子\n誰ㄉ牙齒最好？\n狼\n因為狼牙棒",
+    "哪種酒一年四季都很厲害？\n威士忌",
+    "日本的雞跟鴨哪個比較少？\n雞\n日本鴨說雞的數量非常稀少",
+    "電壓的家叫什麼？\n伏特家",
+    "什麼東西可以一次賞所有人巴掌？\n唐宋古文\n唐宋古文八大家",
+    "點了一個漢堡\n取餐時托盤上卻多放了一杯可樂\n我：這是附的嗎\n店員：這是 drink",
+    "陶晶瑩拍抖音\n晶瑩 tiktok",
+    "蕭煌奇逃跑\n蕭煌栓",
+    "哪間速食店最笨？\n摩斯漢堡\n摩斯巴嘎",
+    "誰的大便是圓形的？\n原始人",
+    "誰最喜歡司機\n愛斯基摩人",
+    "哪一種殺手在出任務時\n只會和別人說英文？\n銀翼殺手",
+    "了了了了了了了了了了了了了了了了了了了了\n了了了了了了了了了了了了了了了了了了\n好多了，謝謝",
+    "氧氣跟二氧化碳誰比較美\n氧氣\n助燃就是美",
+    "在加油站\n客人：95 加 100\n工讀生：這樣是 195",
+    "Jessie 的腳叫什麼\nJessica",
+    "小白和哥哥長得很像\n真相大白",
+    "為什麼巷口賣麵的老闆總是看起來面無表情？\n因為他是面癱老闆",
+    "福原愛失憶醒來後說的第一句話是什麼？\nwho am i",
+    "建築系上課要帶什麼書\n諫逐客書",
+    "如果建築師巴布搬去台北定居會變什麼？\n天龍八部",
+    "警察很生氣\n警報器",
+    "喝什麼水會變厲害\n真 6 水",
+    "擦眼睛為什麼會痛\n拭目以待",
+    "IKEA 的東西壞掉會變什麼\n派 kea",
+    "為何灰姑娘的車不易刮傷\n因為她的車是難刮馬車",
+    "誰最會讀歷史\n美國隊長\nI can do this all day",
+    "為什麼奴隸的脾氣都很好\n因為他們都簽了賣身契",
+    "公雞為什麼喜歡無印良品\n因為他喜歡 muji",
+    "要怎麼跟妲己做朋友\n偷摸她\n這樣就是偷摸妲己了",
+    "三國演義裡誰最像啄木鳥\n董卓",
+    "為什麼哈利波特不喜歡吃冰\n因為魔法少年賈修",
+    "誰喜歡把耳朵塗成藍色\n愛爾蘭人",
+    "一碼歸一碼\n苓膏歸苓膏",
+    "葡萄點名\n葡萄柚",
+    "花枝陪你跑步\nwhats wrong with you",
+    "哪種車最沒種？\n你上",
+    "皮卡丘不洗澡身上會有什麼？\nPokémon Go",
+    "遇強則強\n遇米濃湯",
+    "ABC 差了誰？\n差滴",
+    "以前有ㄧ個食客\n不小心撞見皇上和妃子洞房\n於是他就變成了\n見朕騎姬的食客",
+    "哥倫布到過台灣哪個大學？\n中興大學\n因為他發現興大路",
+    "史上最愛吃零食的總統是誰？\n袁世凱（臨時大總統）",
+    "tony 出門要帶什麼？\n帶水\ntony 帶水",
+    "有一天水被惹怒ㄌ\n它就變成水真氣",
+    "有一天螃蟹在海底走，不小心踩到海星\n海星：幹你是瞎子喔，走路不用看路膩\n螃蟹：不是，我是螃蟹",
+    "壽司見到蜜蜂會說什麼\nwassa bee",
+    "為什麼一隻兔子跳進一個箱子裡後會變成鴨子？\n因為那箱是變壓器",
+    "在摩天輪裡的人都能享受天輪之樂",
+    "先生你好，這是我們店贈送的小菜\n不用了我不需要\n真的嗎？這可是你的筍絲喔",
+    "A：你為什麼總是不相信別人說的話\nB：我的媽媽有八個姊妹\nA：這個跟那個有什麼關係\nB：我是個很多姨的人",
+    "哪個藝人沒吃午餐？\n中島美嘉",
+    "手機咳嗽變什麼？\n手機殼",
+    "佛陀開一間店叫什麼？\nPhotoshop",
+    "花生去泰國\n變杏仁",
+    "客家人開什麼車最多？\n小汽車",
+    "南部的茶叫南部茶\n那北部的茶叫什麼\nBubble tea",
+    "月亮在哪洗澡？\n躍躍欲試",
+    "哪個台灣藝人沒有洞？\n吳慷仁",
+    "奶昔掉到地上變什麼？\n可惜",
+    "為什麼余光中的太太不用煮飯？\n光宗耀祖",
+    "巫師做的燈泡是什麼？\n鎢絲燈",
+    "麥當勞賣什麼？\n當勞",
+    "A 跟 C 誰比較高\nC\n因為 ABCD",
+    "蔡阿嘎的家叫什麼\n嘎之窩",
+    "朋友就像冰塊\n你對著他們尿尿\n他們就會消失",
+    "水餃要去哪裡領？\n當鋪領",
+    "大樹跟小樹差在哪裡？\n插在土裡",
+    "海底哪個動物最好笑？\n海鰻\n因為還蠻好笑的",
+    "肚子餓打什麼針？\n田馥甄",
+    "客家人都開什麼車？\nHa car",
+    "神開的店叫什麼？\nGod 店",
+    "鵝過了山洞會變成什麼？\n過動鵝",
+    "幾個人算一個團體？\n20，因為 twenty"
+  ];
+
+  works = [
+    { tag:"研究 / Python", title:"感測資料異常偵測", desc:"用時間序列模型抓出設備的異常訊號，寫成一篇小論文。", shot:"研究流程圖 / diagram", delay:0 },
+    { tag:"設計 / 前端", title:"看雲心情紀錄 App", desc:"一個幫你記錄今天天空與心情的小工具，從 UI 到前端都自己來。", shot:"App 畫面 / screenshot", delay:80 },
+    { tag:"Newsletter", title:"每週電子報", desc:"寫科技、產品，還有一些沒什麼用但有趣的觀察。", shot:"電子報封面 / cover", delay:160 },
+    { tag:"Hackathon", title:"24 小時天氣小工具", desc:"黑客松作品：一個只會告訴你「要不要帶傘」的極簡網站。", shot:"作品截圖 / shot", delay:240 }
+  ];
+
+  cursorKind(){
+    const c = this.props.cursorStyle;
+    if (c === "紙飛機") return "plane";
+    if (c === "關閉") return "off";
+    return "cloud";
+  }
+
+  toggleContact = () => this.setState(s => ({ contactOpen:!s.contactOpen }));
+  toggleJoke = () => this.setState(s => ({ jokeOpen:!s.jokeOpen, jokeIdx: s.jokeOpen ? s.jokeIdx : Math.floor(Math.random()*this.jokes.length) }));
+  closeJoke = () => this.setState({ jokeOpen:false });
+
+  nextJoke = () => this.setState(s => { let i=s.jokeIdx; if(this.jokes.length>1){ while(i===s.jokeIdx) i=Math.floor(Math.random()*this.jokes.length); } return { jokeIdx:i }; });
+
+  componentDidMount(){
+    this._greet = setInterval(()=>this.setState(s=>({ greetIdx:s.greetIdx+1 })), 4000);
+    this._role = setInterval(()=>this.setState(s=>({ roleIdx:s.roleIdx+1 })), 4000);
+    const root = this.rootEl || document;
+    // ---- scroll reveal ----
+    const spring = this.props.revealStyle === "彈簧回彈";
+    const ease = spring ? "cubic-bezier(.34,1.56,.64,1)" : "cubic-bezier(.22,1,.36,1)";
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const els = Array.from(document.querySelectorAll("[data-reveal]"));
+    if (!reduce){
+      els.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        const d = parseInt(el.getAttribute("data-reveal-delay")||"0",10);
+        el.style.transition = `opacity .7s ease ${d}ms, transform .75s ${ease} ${d}ms`;
+      });
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){ e.target.style.opacity="1"; e.target.style.transform="none"; io.unobserve(e.target); }
+        });
+      }, { threshold:0.15, rootMargin:"0px 0px -8% 0px" });
+      els.forEach(el=>io.observe(el));
+      this._io = io;
+    }
+
+    // ---- custom cursor ----
+    const cur = document.querySelector("[data-cursor]");
+    const kind = this.cursorKind();
+    if (cur && kind !== "off" && window.matchMedia("(pointer:fine)").matches){
+      document.body.style.cursor = "none";
+      let x=window.innerWidth/2, y=window.innerHeight/2, cx=x, cy=y, shown=false;
+      const move = (e)=>{ x=e.clientX; y=e.clientY; if(!shown){ shown=true; cur.style.opacity="1"; } };
+      const leave = ()=>{ cur.style.opacity="0"; shown=false; };
+      window.addEventListener("mousemove", move);
+      document.addEventListener("mouseleave", leave);
+      const tick = ()=>{
+        // tight follow: near-direct with tiny smoothing
+        cx += (x-cx)*0.55; cy += (y-cy)*0.55;
+        cur.style.transform = `translate(${cx}px,${cy}px) scale(${this._hoverScale||1})`;
+        this._raf = requestAnimationFrame(tick);
+      };
+      tick();
+      // scale up over interactive targets
+      const over = (e)=>{ if(e.target.closest("a,button,[data-interactive]")) this._hoverScale=1.5; };
+      const out = (e)=>{ if(e.target.closest("a,button,[data-interactive]")) this._hoverScale=1; };
+      document.addEventListener("mouseover", over);
+      document.addEventListener("mouseout", out);
+      this._curCleanup = ()=>{ window.removeEventListener("mousemove",move); document.removeEventListener("mouseleave",leave); document.removeEventListener("mouseover",over); document.removeEventListener("mouseout",out); document.body.style.cursor=""; };
+    }
+  }
+
+  componentWillUnmount(){
+    if(this._greet) clearInterval(this._greet);
+    if(this._role) clearInterval(this._role);
+    if(this._io) this._io.disconnect();
+    if(this._raf) cancelAnimationFrame(this._raf);
+    if(this._curCleanup) this._curCleanup();
+  }
+
+  renderVals(){
+    const kind = this.cursorKind();
+    return {
+      greetIdx: this.state.greetIdx,
+      greeting: this.greetings[this.state.greetIdx % this.greetings.length],
+      roleIdx: this.state.roleIdx,
+      role: this.roles[this.state.roleIdx % this.roles.length].label,
+      roleStyle: (()=>{ const c=this.roles[this.state.roleIdx % this.roles.length].c; return `padding:9px 16px; border-radius:100px; font-size:14px; background:${this.hexToRgba(c,0.28)}; border:1px solid ${this.hexToRgba(c,0.7)}; animation:fadeChip .55s ease both;`; })(),
+      contactOpen: this.state.contactOpen,
+      jokeOpen: this.state.jokeOpen,
+      currentJoke: this.jokes[this.state.jokeIdx],
+      works: this.works,
+      showCloud: kind === "cloud",
+      showPlane: kind === "plane",
+      toggleContact: this.toggleContact,
+      toggleJoke: this.toggleJoke,
+      closeJoke: this.closeJoke,
+      nextJoke: this.nextJoke
+    };
+  }
+}
+</script>
+</body>
+</html>
